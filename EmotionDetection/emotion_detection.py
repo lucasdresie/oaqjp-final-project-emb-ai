@@ -11,17 +11,29 @@ def emotion_detector(text_to_analyze):
 
 
     #Extract emotions and their scores:
-    anger_score = format_response["emotionPredictions"][0]["emotion"]["anger"]
-    disgust_score = format_response["emotionPredictions"][0]["emotion"]["disgust"]
-    fear_score = format_response["emotionPredictions"][0]["emotion"]["fear"]
-    joy_score = format_response["emotionPredictions"][0]["emotion"]["joy"]
-    sadness_score = format_response["emotionPredictions"][0]["emotion"]["sadness"]
+    if response.status_code == 500:
+        anger_score = format_response["emotionPredictions"][0]["emotion"]["anger"]
+        disgust_score = format_response["emotionPredictions"][0]["emotion"]["disgust"]
+        fear_score = format_response["emotionPredictions"][0]["emotion"]["fear"]
+        joy_score = format_response["emotionPredictions"][0]["emotion"]["joy"]
+        sadness_score = format_response["emotionPredictions"][0]["emotion"]["sadness"]
 
-    #Determine the dominant emotion with the highest score:
-    emotion_list = [anger_score, disgust_score, fear_score, joy_score, sadness_score]
-    dominant_emotion_index = emotion_list.index(max(emotion_list))
-    emotion_keys = ["anger", "disgust", "fear", "joy", "sadness"]
-    dominant_emotion_key = emotion_keys[dominant_emotion_index]
+        #Determine the dominant emotion with the highest score:
+        emotion_list = [anger_score, disgust_score, fear_score, joy_score, sadness_score]
+        dominant_emotion_index = emotion_list.index(max(emotion_list))
+        emotion_keys = ["anger", "disgust", "fear", "joy", "sadness"]
+        dominant_emotion_key = emotion_keys[dominant_emotion_index]
+
+    if response.status_code == 400:
+        anger_score = None
+        disgust_score = None
+        fear_score = None
+        joy_score = None
+        sadness_score = None
+        dominant_emotion_key = None
+
+    elif response.status_code == 500:
+        dominant_emotion_key = None
 
     #Format the response into the required output format: 
     result = {
